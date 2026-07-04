@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&family=Heebo:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- הוספת סקריפט Lemon.js עבור ה-Overlay -->
+    <script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
 
     <style>
         :root {
@@ -177,7 +179,6 @@
             border-color: var(--accent);
         }
 
-        /* מסך תצוגה מקדימה - מדמה דף A4 אמיתי ומקצועי */
         .preview-container-box {
             position: relative;
             width: 100%;
@@ -196,7 +197,6 @@
             overflow-y: auto;
         }
 
-        /* אפקט סורק לייזר AI מתקדם */
         .ai-scanner {
             display: none;
             position: absolute;
@@ -213,7 +213,6 @@
             100% { top: 0%; }
         }
 
-        /* חוקי עיצוב אוטומטיים של מנוע ה-AI החכם */
         .document-output {
             font-family: 'Heebo', sans-serif;
             color: #1e293b;
@@ -244,7 +243,6 @@
         .document-output p {
             margin-bottom: 14px;
             text-align: justify;
-            text-indent: 0px;
         }
 
         .document-output ul {
@@ -288,7 +286,6 @@
             box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.6);
         }
 
-        /* מסך טעינה חכם המדמה פעולת AI */
         .loading-overlay {
             display: none;
             position: absolute;
@@ -330,7 +327,6 @@
             min-height: 20px;
         }
 
-        /* פופ-אפ תשלום */
         .modal {
             display: none;
             position: fixed;
@@ -395,13 +391,11 @@
 
     <header>
         <h1>עיצוב מסמכים חכם בבינה מלאכותית</h1>
-        <p>פשוט זרוק כאן את הטקסט הגולמי שלך. מנוע ה-AI ינתח את המבנה, יזהה כותרות, ויפיק מסמך מנהלים יוקרתי ברגע אחד.</p>
+        <p>פשוט זרוק כאן את הטקסט הגולמי שלך. מנוע ה-AI ינתח את המבנה, יזהה כותרות, ויפיק מסמך מנהלים יוקרתי ברגע אחד.</</p>
     </header>
 
     <div class="app-grid">
-        <!-- כרטיס קלט -->
         <div class="card">
-            <!-- מסך הטעיית AI סימולטיבי -->
             <div class="loading-overlay" id="loadingOverlay">
                 <div class="ai-status-box">
                     <div class="ai-pulse"></div>
@@ -425,7 +419,6 @@
             <button class="btn-action" onclick="runAiSimulation()">עבד ועצב מסמך מוגמר</button>
         </div>
 
-        <!-- כרטיס תצוגה מקדימה -->
         <div class="card">
             <div class="card-header">
                 <h3>תצוגת ה-PDF המעוצב</h3>
@@ -440,20 +433,24 @@
     </div>
 </div>
 
-<!-- מודאל תשלום -->
 <div id="paymentModal" class="modal">
     <div class="modal-content">
         <button class="close-btn" onclick="closePaymentModal()">&times;</button>
         <h2>המסמך המעוצב מוכן!</h2>
         <p>מנוע ה-AI סיים את עיצוב וסידור הנייר. פתח גישה להורדת קובץ ה-PDF הרשמי ללא סימני מים.</p>
         <div class="price-container">₪19</div>
-        <a href="https://gumroad.com" id="gumroadLink" target="_blank" style="text-decoration: none;">
+        <a href="https://focuslab1.lemonsqueezy.com/checkout/buy/d32032bb-7ecc-48e8-b156-7c2740b0f19d" class="lemonsqueezy-button" style="text-decoration: none;">
             <button class="btn-action" style="margin-top: 0;">המשך לתשלום מאובטח</button>
         </a>
     </div>
 </div>
 
 <script>
+    // האזנה לאירוע הצלחת תשלום מ-Lemon Squeezy ללא צורך במייל
+    window.addEventListener('LemonSqueezy.Url.PaymentSuccess', (event) => {
+        window.location.href = window.location.origin + window.location.pathname + '?status=success';
+    });
+
     const inputText = document.getElementById('inputText');
     const preview = document.getElementById('preview');
     const dropzone = document.getElementById('dropzone');
@@ -479,7 +476,6 @@
         }
     });
 
-    // מנוע חכם - מנתח טקסט חופשי לחלוטין ללא סימנים מיוחדים!
     function processAndRenderTextSmart(text) {
         if (!text.trim()) {
             preview.innerHTML = '<div class="doc-placeholder">המסמך המעוצב שלך יופיע כאן מיד עם הזנת נתונים...</div>';
@@ -495,14 +491,12 @@
             let cleanLine = line.trim();
             if (cleanLine === '') return;
 
-            // 1. השורה הראשונה במסמך הופכת אוטומטית לכותרת ראשית חגיגית
             if (isFirstLine) {
                 htmlResult += `<h1>${cleanLine}</h1>`;
                 isFirstLine = false;
                 return;
             }
 
-            // 2. זיהוי אוטומטי של בולטים (שורות שמתחילות בסימן או קצרות ברצף)
             if (cleanLine.startsWith('*') || cleanLine.startsWith('-') || cleanLine.startsWith('•') || /^\d+\./.test(cleanLine)) {
                 if (!inList) {
                     htmlResult += '<ul>';
@@ -518,12 +512,10 @@
                 inList = false;
             }
 
-            // 3. זיהוי תת-כותרת בצורה חכמה: שורה קצרה (עד 6 מילים) שללא נקודה בסופה
             let wordsCount = cleanLine.split(/\s+/).length;
             if (wordsCount <= 6 && !cleanLine.endsWith('.') && !cleanLine.endsWith(',')) {
                 htmlResult += `<h2>${cleanLine}</h2>`;
             } else {
-                // פסקאות רגילות
                 htmlResult += `<p>${cleanLine}</p>`;
             }
         });
@@ -535,12 +527,10 @@
         localStorage.setItem('user_text_backup', text);
     }
 
-    // מאזין קלט רגיל (מעדכן בלייב בצורה חלקה)
     inputText.addEventListener('input', () => {
         processAndRenderTextSmart(inputText.value);
     });
 
-    // סימולציית ה-AI היוקרתית בלחיצה על כפתור הייצוא
     function runAiSimulation() {
         if (!inputText.value.trim()) {
             alert('אנא הזן טקסט או העלה קובץ תחילה.');
@@ -550,7 +540,6 @@
         loadingOverlay.style.display = 'flex';
         aiScanner.style.display = 'block';
 
-        // החלפת טקסטים דינמית בתוך ה"מחשב" של ה-AI ליצירת מצג מרשים
         setTimeout(() => { aiLog.innerText = "[סורק היררכיית פסקאות ומילים...]"; }, 600);
         setTimeout(() => { aiLog.innerText = "[מיישר שוליים ומחשב מרחקי הדפסה...]"; }, 1300);
         setTimeout(() => { aiLog.innerText = "[מחיל ערכת עיצוב Executive פרימיום...]"; }, 2100);
@@ -558,12 +547,10 @@
         setTimeout(() => {
             loadingOverlay.style.display = 'none';
             aiScanner.style.display = 'none';
-            // בסיום הסריקה - פותח את חלון התשלום
             openPaymentModal();
         }, 2800);
     }
 
-    // העלאת קבצים
     fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
